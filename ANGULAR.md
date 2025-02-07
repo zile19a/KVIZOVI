@@ -348,4 +348,323 @@ D) ngForm
 | 23 | B) A data source emitting values |
 | 24 | A) Data, Errors, Completion |
 
+### **Angular Quiz and Info 2**
+1. Angular Setup & CLI
+Key Points:
+
+Install Angular CLI globally:
+
+bash
+Copy
+npm install -g @angular/cli
+Create a new project:
+
+bash
+Copy
+ng new my-app
+Run the app:
+
+bash
+Copy
+ng serve
+2. Components
+Definition: Reusable UI blocks with their own logic and template.
+Code Example:
+
+typescript
+Copy
+// app/components/user/user.component.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-user',
+  template: `<h2>User: {{ username }}</h2>`,
+  styles: [`h2 { color: blue; }`]
+})
+export class UserComponent {
+  username = 'Alice';
+}
+3. Data Binding
+Types:
+
+String Interpolation:
+
+html
+Copy
+<p>Welcome, {{ username }}!</p>
+Run HTML
+Property Binding:
+
+html
+Copy
+<img [src]="imageUrl">  
+Run HTML
+Event Binding:
+
+html
+Copy
+<button (click)="onClick()">Click Me</button>
+Run HTML
+Two-Way Binding (requires FormsModule):
+
+html
+Copy
+<input [(ngModel)]="username">
+Run HTML
+4. Directives
+Common Directives:
+
+*ngIf:
+
+html
+Copy
+<div *ngIf="isLoggedIn">Welcome back!</div>
+Run HTML
+*ngFor:
+
+html
+Copy
+<ul>
+  <li *ngFor="let item of items">{{ item }}</li>
+</ul>
+Run HTML
+ngStyle:
+
+html
+Copy
+<p [ngStyle]="{ 'color': isError ? 'red' : 'green' }">Status</p>
+Run HTML
+5. Services & Dependency Injection
+Service Example:
+
+typescript
+Copy
+// app/services/data.service.ts
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+@Injectable({ providedIn: 'root' })
+export class DataService {
+  constructor(private http: HttpClient) {}
+
+  fetchUsers() {
+    return this.http.get('https://api.example.com/users');
+  }
+}
+Injecting a Service:
+
+typescript
+Copy
+// app/components/user/user.component.ts
+constructor(private dataService: DataService) {
+  this.dataService.fetchUsers().subscribe(users => this.users = users);
+}
+6. HTTP Requests
+HTTP GET Example:
+
+typescript
+Copy
+// app/services/api.service.ts
+getPost(id: number) {
+  return this.http.get(`https://jsonplaceholder.typicode.com/posts/${id}`);
+}
+Handling Responses:
+
+typescript
+Copy
+this.apiService.getPost(1).subscribe({
+  next: (post) => console.log(post),
+  error: (err) => console.error(err)
+});
+7. Routing
+Route Configuration:
+
+typescript
+Copy
+// app/app-routing.module.ts
+const routes: Routes = [
+  { path: 'home', component: HomeComponent },
+  { path: 'users', component: UserComponent },
+  { path: '**', redirectTo: 'home' } // Wildcard route
+];
+Router Outlet:
+
+html
+Copy
+<router-outlet></router-outlet>
+Run HTML
+8. Forms
+Template-Driven Form:
+
+html
+Copy
+<form #userForm="ngForm" (ngSubmit)="onSubmit(userForm)">
+  <input name="username" ngModel required>
+  <button type="submit">Submit</button>
+</form>
+Run HTML
+Reactive Form:
+
+typescript
+Copy
+// app/components/login/login.component.ts
+import { FormBuilder, Validators } from '@angular/forms';
+
+loginForm = this.fb.group({
+  email: ['', [Validators.required, Validators.email]],
+  password: ['', Validators.minLength(6)]
+});
+
+constructor(private fb: FormBuilder) {}
+Part 2: Comprehensive Angular Quiz
+Test your knowledge with 25 questions (mix of theory and code).
+
+Section 1: Multiple Choice
+What does providedIn: 'root' do in a service?
+
+A) Makes the service available globally
+
+B) Limits the service to a module
+
+C) Destroys the service after use
+
+Which directive is used for conditional rendering?
+
+A) *ngFor
+
+B) *ngIf
+
+C) ngStyle
+
+What is the purpose of FormsModule?
+
+A) Enable HTTP requests
+
+B) Enable two-way data binding with ngModel
+
+C) Add routing functionality
+
+Section 2: True/False
+Angular components must always have a template and styles.
+
+A) True
+
+B) False
+
+Observables are used to handle asynchronous operations.
+
+A) True
+
+B) False
+
+Section 3: Code Debugging
+Why won’t this code render the list?
+
+html
+Copy
+<ul>
+  <li *ngFor="let user of users">{{ user.name }}</li>
+</ul>
+Run HTML
+A) users is undefined
+
+B) Missing CommonModule
+
+C) *ngFor is spelled incorrectly
+
+What’s wrong with this service?
+
+typescript
+Copy
+@Injectable()
+export class DataService {
+  constructor() {}
+}
+A) Missing providedIn: 'root'
+
+B) No HttpClient injection
+
+C) No decorator
+
+Section 4: Practical Exercises
+Create a component ProductList that displays an array of products using *ngFor.
+
+typescript
+Copy
+// Code here
+Write a service method to fetch data from https://api.example.com/posts.
+
+Fix this template-driven form to include validation for an email field.
+
+html
+Copy
+<form #form="ngForm">
+  <input name="email" ngModel>
+  <button type="submit">Submit</button>
+</form>
+Run HTML
+Answers & Explanations
+A – providedIn: 'root' makes the service globally available.
+
+B – *ngIf conditionally renders elements.
+
+B – FormsModule enables ngModel.
+
+B – Components can have inline or external templates/styles.
+
+A – Observables handle async tasks like HTTP requests.
+
+B – CommonModule is required for *ngFor.
+
+A – The service isn’t provided globally.
+
+Advanced Questions
+How would you implement lazy loading for a AdminModule?
+
+typescript
+Copy
+// app-routing.module.ts
+{ 
+  path: 'admin', 
+  loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule) 
+}
+What’s the difference between setValue and patchValue in reactive forms?
+
+setValue: Updates all form controls.
+
+patchValue: Updates specific controls.
+
+Final Challenge
+Build a component that:
+
+Fetches and displays a list of todos from https://jsonplaceholder.typicode.com/todos.
+
+Shows a loading spinner while data is being fetched.
+
+Uses *ngIf to handle errors.
+
+typescript
+Copy
+// todo.component.ts
+export class TodoComponent implements OnInit {
+  todos: any[] = [];
+  isLoading = true;
+  error: string | null = null;
+
+  constructor(private http: HttpClient) {}
+
+  ngOnInit() {
+    this.http.get('https://jsonplaceholder.typicode.com/todos')
+      .subscribe({
+        next: (data) => {
+          this.todos = data;
+          this.isLoading = false;
+        },
+        error: (err) => {
+          this.error = 'Failed to fetch todos';
+          this.isLoading = false;
+        }
+      });
+  }
+}
 ---
