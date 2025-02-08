@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <p>
+            Exercise 3 – JavaScript (20%)
+Your task is to write JavaScript code in order to manipulate the DOM and change some
+HTML elements. No frameworks or toolkits are allowed.
+In exercise-3.html you will find the original HTML code that you must manipulate using
+JavaScript.
+The final version of the HTML page, after JavaScript has been executed, is provided in
+exercise-3-final.html. For your convenience, comments have been added to help you
+identify where the changes should take place.
+You will write the JavaScript code in the exercise-3.js file that is provided.
+The changes are the following:
+ You should change the text of the header (h1)
+ You should add an h2 underneath the h1 (Don’t forget to enclose it in &lt;em&gt;&lt;/em&gt;)
+ You should the class “active” to the Home link
+ You should add a “Menu Subitem 3.1” just above the “Menu Subitem 3.2”
+ You should remove the “Menu Item 4”
+ You should add the “alt” attribute on the image tag
+ You should add an event listener on the form, so that when it submits, it should
+display the data entered by the user in the result paragraph tag. The result can be
+in the form of “Hi username. Your email is user@home.net.”
+Hint: In the event listener for the form submission, the first line should be
+evt.preventDefault(), so that the form does not submit, but stays on the same page.
+        </p>
+    </div>
+
+    <div>
+        <div id="top">
+            <!-- CHANGE: Change the text of the h1 -->
+            <h1></h1>
+            <!-- CHANGE: Add the h2 -->
+            
+        </div>
+        <div id="menu">
+            <ul>
+                <!-- CHANGE: Add the class active to the first li -->
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Menu Item 1</a></li>
+                <li>
+                    <ul>
+                        <li><a href="#">Menu Subitem 1.1</a></li>
+                        <li><a href="#">Menu Subitem 1.2</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Menu Item 2</a></li>
+                <li><a href="#">Menu Item 3</a></li>
+                <li>
+                    <ul>
+                        <!-- CHANGE: Add the Menu Subitem 3.1 -->
+                        
+                        <li><a href="#">Menu Subitem 3.2</a></li>
+                    </ul>
+                </li>
+                <!-- CHANGE: Remove the Menu Item 4 -->
+            </ul>
+        </div>
+        <div class="content">
+    
+            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
+            <p>
+                   <span class="read-more">
+                       <a href="#">
+                           <!-- CHANGE: Add alt attribute to the img -->
+                           <img src="images/01.png">
+                       </a>
+                   </span>
+            </p>
+    
+            <!-- CHANGE: Add an event listener for the submit event -->
+            <form action="" method="post">
+                <label>
+                    <span>Name (required):</span>
+                    <input type="text" name="name" maxlength="32" required="">
+                </label>
+                <label>
+                    <span>Email (required):</span>
+                    <input type="text" name="email" required="" email="">
+                </label>
+    
+                <input type="submit" value="Submit">
+            </form>
+    
+            <!-- HINT: The result of the above form will be displayed inside the p element -->
+            <p id="result"></p>
+        </div>
+    </div>
+
+    <script>
+
+        // h1 promena teksta
+        document.addEventListener("DOMContentLoaded", function () {
+            const header = document.querySelector("h1");
+            header.textContent = "This is the corect header!";
+
+        // dodavanje h2
+            const subtitle = document.createElement("h2");
+            subtitle.innerHTML = "<em>This is the subtitle</em>";
+            header.parentNode.appendChild(subtitle);
+
+
+            // active class za home link
+            const homeLink = document.querySelector("#menu ul li a");
+            homeLink.classList.add("active");
+
+            // dodaj menu subitem 3.1 iznad menu subitem 3.2
+            const subitem3_1 = document.createElement("li");
+            subitem3_1.innerHTML = '<a href="#">Menu Subitem 3.1</a>';
+
+            // Dodaje menusubitem 3.1 ispred 3.2 tako sto selektuje menu ul li ul i onda preko insertBefore ubacuje 3.1 ispred prvog deteta
+            const menuSubitems = document.querySelector("#menu ul li ul");
+            if(menuSubitems) {
+                menuSubitems.insertBefore(subitem3_1, menuSubitems.children[1]);
+            }
+
+            // brise menu item 4
+            const menuItems = document.querySelectorAll("#menu ul li a");
+            menuItems.forEach(item => {
+                if(item.textContent === "Menu Item 4") {
+                    item.parentElement.remove();
+                }
+            } );
+
+            // dodavanje alt atributa za sliku
+            const img = document.querySelector(".read-more img");
+            img.setAttribute("alt" , "Read more");
+
+
+            // dodavanje event listener za submit formu
+            const form = document.querySelector("form");
+            const result = document.getElementById("result");
+
+            form.addEventListener("submit", function (evt) {
+                evt.preventDefault();
+
+                const name = form.elements["name"].value;
+                const email = form.elements["email"].value;
+
+                result.textContent = 'Hi ${name}, Your email is ${email}.'
+            });
+        
+        });
+    </script>
+</body>
+</html>
+
+
